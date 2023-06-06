@@ -1,4 +1,8 @@
-## Hi there 👋
+## Cheminformatics and Computational Metabolomics
+- Welcome to the official GitHub organization page for the Steinbeck-Lab, a team specializing in Cheminformatics and Computational Metabolomics at Friedrich-Schiller-University in Jena.
+
+## Research Group
+[![GitHub Logo](https://github.com/Kohulan/DECIMER-Image-to-SMILES/blob/master/assets/CheminfGit.png)](https://cheminf.uni-jena.de)
 
 <!--
 
