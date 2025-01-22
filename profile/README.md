@@ -10,7 +10,7 @@
 </div>
 
 
-# ⚡ Our Flagship Projects ⚡
+# Our Ongoing Projects
 
 <table>
 <tr>
@@ -159,6 +159,9 @@
 
 <a href="#"><img src="https://img.shields.io/badge/🐍_PYTHON-gradient?style=for-the-badge&logo=python&logoColor=white&labelColor=3776AB&color=FFD43B" alt="Python"></a>
 <a href="#"><img src="https://img.shields.io/badge/☕_JAVA-gradient?style=for-the-badge&logo=openjdk&logoColor=white&labelColor=ED8B00&color=FF7F00" alt="Java"></a>
+<a href="#"><img src="https://img.shields.io/badge/🌐_JAVASCRIPT-gradient?style=for-the-badge&logo=javascript&logoColor=white&labelColor=F7DF1E&color=323330" alt="JavaScript"></a>
+<a href="#"><img src="https://img.shields.io/badge/🔧_PHP-gradient?style=for-the-badge&logo=php&logoColor=white&labelColor=777BB4&color=4F5B93" alt="PHP"></a>
+<a href="#"><img src="https://img.shields.io/badge/⚙️_C-gradient?style=for-the-badge&logo=c&logoColor=white&labelColor=00599C&color=004482" alt="C"></a>
 <a href="#"><img src="https://img.shields.io/badge/📊_R-gradient?style=for-the-badge&logo=r&logoColor=white&labelColor=276DC3&color=75AADB" alt="R"></a>
 <a href="#"><img src="https://img.shields.io/badge/🐳_DOCKER-gradient?style=for-the-badge&logo=docker&logoColor=white&labelColor=2496ED&color=099CEC" alt="Docker"></a>
 <a href="#"><img src="https://img.shields.io/badge/📚_GIT-gradient?style=for-the-badge&logo=git&logoColor=white&labelColor=F05032&color=FF7F7F" alt="Git"></a>
