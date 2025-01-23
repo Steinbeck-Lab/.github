@@ -176,6 +176,12 @@
 
 <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&weight=600&size=30&duration=3000&pause=1000&color=704214&center=true&vCenter=true&repeat=true&width=500&height=60&lines=Made+with+%E2%98%95+by+Steinbeck+Lab;Brewing+Code+%E2%98%95+Since+1999;Powered+by+%E2%98%95+and+Code" />
 
+<p align="center">
+  <br>
+  ════ ⋆★⋆ ════
+  <br>
+</p>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=61DAFB&height=120&section=footer"/>
 </div>
 
 </div>
