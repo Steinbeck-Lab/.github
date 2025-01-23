@@ -10,7 +10,7 @@
 </div>
 
 
-# Our Ongoing Projects
+# Ongoing Projects
 
 <table>
 <tr>
@@ -153,7 +153,7 @@
 
 <br>
 
-# 💻 Our Technology Stack
+# 💻 Technology Stack
 
 <div align="center">
 
