@@ -21,138 +21,121 @@ This GitHub site is dedicated to the dissemination and management of research so
 
 ### 🥥 COCONUT Database
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=2,4,6&height=3"/>
-
 <kbd>
 <br>
+<a href="https://github.com/Steinbeck-Lab/coconut">
 <img src="https://github-readme-stats.vercel.app/api/pin/?username=Steinbeck-Lab&repo=coconut&theme=react&border_color=61dafb&border_radius=10" alt="COCONUT Stats">
+</a>
 <br>
 <img src="https://img.shields.io/github/commits-since/Steinbeck-Lab/coconut/latest?style=flat-square&logo=git&logoColor=white&labelColor=2B3137&color=61DAFB" alt="COCONUT Commits">
 <br>
 <img src="https://repobeats.axiom.co/api/embed/34ef6fcab45b9fa10fe0f985f04fabb300a6fd8e.svg" alt="COCONUT Analytics" width="300">
 <br>
 </kbd>
-
 </div>
-
 </td>
 <td width="50%">
-
 <div align="center">
 
 ### ⚡ Cheminformatics Microservice
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=14,4,2&height=3"/>
-
 <kbd>
 <br>
+<a href="https://github.com/Steinbeck-Lab/cheminformatics-microservice">
 <img src="https://github-readme-stats.vercel.app/api/pin/?username=Steinbeck-Lab&repo=cheminformatics-microservice&theme=react&border_color=61dafb&border_radius=10" alt="Microservice Stats">
+</a>
 <br>
 <img src="https://img.shields.io/github/commits-since/Steinbeck-Lab/cheminformatics-microservice/latest?style=flat-square&logo=git&logoColor=white&labelColor=2B3137&color=61DAFB" alt="Microservice Commits">
 <br>
 <img src="https://repobeats.axiom.co/api/embed/4f9d58644c84fa1730f556f23fbb328bea710597.svg" alt="Microservice Analytics" width="300">
 <br>
 </kbd>
-
 </div>
-
 </td>
 </tr>
 </table>
-
 <br>
-
 <table>
 <tr>
 <td width="50%">
-
 <div align="center">
 
 ### 🔍 DECIMER
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,8,10&height=3"/>
-
 <kbd>
 <br>
+<a href="https://github.com/Kohulan/DECIMER-Image_Transformer">
 <img src="https://github-readme-stats.vercel.app/api/pin/?username=Steinbeck-Lab&repo=DECIMER-Image_Transformer&theme=react&border_color=61dafb&border_radius=10" alt="DECIMER Stats">
+</a>
 <br>
 <img src="https://img.shields.io/github/commits-since/Kohulan/DECIMER-Image_Transformer/latest?style=flat-square&logo=git&logoColor=white&labelColor=2B3137&color=61DAFB" alt="DECIMER Commits">
 <br>
 <img src="https://repobeats.axiom.co/api/embed/bf532b7ac0d34137bdea8fbb82986828f86de065.svg" alt="DECIMER Analytics" width="300">
 <br>
 </kbd>
-
 </div>
-
 </td>
 <td width="50%">
-
 <div align="center">
 
 ### 🔤 STOUT
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=8,10,12&height=3"/>
-
 <kbd>
 <br>
+<a href="https://github.com/Kohulan/Smiles-TO-iUpac-Translator">
 <img src="https://github-readme-stats.vercel.app/api/pin/?username=Steinbeck-Lab&repo=Smiles-TO-iUpac-Translator&theme=react&border_color=61dafb&border_radius=10" alt="STOUT Stats">
+</a>
 <br>
 <img src="https://img.shields.io/github/commits-since/Kohulan/Smiles-TO-iUpac-Translator/latest?style=flat-square&logo=git&logoColor=white&labelColor=2B3137&color=61DAFB" alt="STOUT Commits">
 <br>
 <img src="https://repobeats.axiom.co/api/embed/01a1cb31c8d0d26438db127fe65e0c7e8c532d17.svg" alt="STOUT Analytics" width="300">
 <br>
 </kbd>
-
 </div>
-
 </td>
 </tr>
 </table>
-
 <br>
-
 <table>
 <tr>
 <td width="50%">
-
 <div align="center">
 
 ### 🏗️ MORTAR
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=10,12,14&height=3"/>
-
 <kbd>
 <br>
+<a href="https://github.com/FelixBaensch/MORTAR">
 <img src="https://github-readme-stats.vercel.app/api/pin/?username=Steinbeck-Lab&repo=MORTAR&theme=react&border_color=61dafb&border_radius=10" alt="MORTAR Stats">
+</a>
 <br>
 <img src="https://img.shields.io/github/commits-since/FelixBaensch/MORTAR/latest?style=flat-square&logo=git&logoColor=white&labelColor=2B3137&color=61DAFB" alt="MORTAR Commits">
 <br>
 <img src="https://repobeats.axiom.co/api/embed/5ce429ad1071045c3586b6af3db59ef9f073e697.svg" alt="MORTAR Analytics" width="300">
 <br>
 </kbd>
-
 </div>
-
 </td>
 <td width="50%">
-
 <div align="center">
 
 ### 🔎 Sherlock
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12,14,16&height=3"/>
-
 <kbd>
 <br>
+<a href="https://github.com/Steinbeck-Lab/sherlock">
 <img src="https://github-readme-stats.vercel.app/api/pin/?username=Steinbeck-Lab&repo=sherlock&theme=react&border_color=61dafb&border_radius=10" alt="Sherlock Stats">
+</a>
 <br>
 <img src="https://img.shields.io/github/commits-since/michaelwenk/sherlock/latest?style=flat-square&logo=git&logoColor=white&labelColor=2B3137&color=61DAFB" alt="Sherlock Commits">
 <br>
 <img src="https://repobeats.axiom.co/api/embed/45afd1d01790cf837e6c86af764490b9a78f8651.svg" alt="Sherlock Analytics" width="300">
 <br>
 </kbd>
-
 </div>
-
 </td>
 </tr>
 </table>
-
-<br>
 
 # 💻 Technology Stack
 
