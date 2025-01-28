@@ -14,7 +14,8 @@
 
 > *This GitHub site is dedicated to the dissemination and management of research software developed by the Steinbeck Lab. For more information about our work and group, please visit https://cheminf.uni-jena.de.* ✨
 
-<br>
+<be>
+
 # Ongoing Projects
 
 <table>
