@@ -65,7 +65,7 @@
 <td width="50%">
 <div align="center">
 
-### 🔍 DECIMER
+### 🔍 DECIMER - Image Transformer
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,8,10&height=3"/>
 <kbd>
 <br>
@@ -75,7 +75,7 @@
 <br>
 <img src="https://img.shields.io/github/commits-since/Kohulan/DECIMER-Image_Transformer/latest?style=flat-square&logo=git&logoColor=white&labelColor=2B3137&color=61DAFB" alt="DECIMER Commits">
 <br>
-<img src="https://repobeats.axiom.co/api/embed/bf532b7ac0d34137bdea8fbb82986828f86de065.svg" alt="DECIMER Analytics" width="300">
+<img src="https://repobeats.axiom.co/api/embed/bf532b7ac0d34137bdea8fbb82986828f86de065.svg" alt="DECIMER Transformer Analytics" width="300">
 <br>
 </kbd>
 </div>
@@ -83,17 +83,17 @@
 <td width="50%">
 <div align="center">
 
-### 🔤 STOUT
+### 🔤 DECIMER - Image Segmentation
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=8,10,12&height=3"/>
 <kbd>
 <br>
-<a href="https://github.com/Kohulan/Smiles-TO-iUpac-Translator">
-<img src="https://github-readme-stats.vercel.app/api/pin/?username=Steinbeck-Lab&repo=Smiles-TO-iUpac-Translator&theme=react&border_color=61dafb&border_radius=10" alt="STOUT Stats">
+<a href="https://github.com/Kohulan/DECIMER-Image-Segmentation">
+<img src="https://github-readme-stats.vercel.app/api/pin/?username=Kohulan&repo=DECIMER-Image-Segmentation&theme=react&border_color=61dafb&border_radius=10" alt="STOUT Stats">
 </a>
 <br>
-<img src="https://img.shields.io/github/commits-since/Kohulan/Smiles-TO-iUpac-Translator/latest?style=flat-square&logo=git&logoColor=white&labelColor=2B3137&color=61DAFB" alt="STOUT Commits">
+<img src="https://img.shields.io/github/commits-since/Kohulan/DECIMER-Image-Segmentation/latest?style=flat-square&logo=git&logoColor=white&labelColor=2B3137&color=61DAFB" alt="STOUT Commits">
 <br>
-<img src="https://repobeats.axiom.co/api/embed/01a1cb31c8d0d26438db127fe65e0c7e8c532d17.svg" alt="STOUT Analytics" width="300">
+<img src="https://repobeats.axiom.co/api/embed/01a1cb31c8d0d26438db127fe65e0c7e8c532d17.svg" alt="DECIMER Segmentation Analysis" width="300">
 <br>
 </kbd>
 </div>
