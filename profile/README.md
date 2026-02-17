@@ -4,11 +4,9 @@
 
 <div align="center">
 
-[![Website](https://img.shields.io/badge/🌐_EXPLORE_OUR_RESEARCH-cheminf.uni--jena.de-gradient?style=for-the-badge&logoColor=white&labelColor=2B3137&color=56B6C2)](https://cheminf.uni-jena.de)
-[![GitHub](https://img.shields.io/badge/🔬_JOIN_OUR_LAB-Steinbeck--Lab-gradient?style=for-the-badge&logoColor=white&labelColor=2B3137&color=61DAFB)](https://github.com/Steinbeck-Lab)
-<a href="https://naturalproducts.net">
-<img src="https://img.shields.io/badge/NaturalProducts.net-Platform-A0784C?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNBMDc4NEMiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIvPjwvc3ZnPg==&labelColor=1A120B" alt="NaturalProducts.net">
-</a>
+[![Website](https://img.shields.io/badge/🌐_EXPLORE_OUR_RESEARCH-cheminf.uni--jena.de-5DADE2?style=for-the-badge&logoColor=white&labelColor=0f0f23&color=48D1CC)](https://cheminf.uni-jena.de)
+[![GitHub](https://img.shields.io/badge/🔬_JOIN_OUR_LAB-Steinbeck--Lab-5DADE2?style=for-the-badge&logoColor=white&labelColor=0f0f23&color=4169E1)](https://github.com/Steinbeck-Lab)
+[![NaturalProducts](https://img.shields.io/badge/☕_NaturalProducts.net-Platform-5DADE2?style=for-the-badge&logoColor=white&labelColor=0f0f23&color=BA55D3)](https://naturalproducts.net)
 
 </div>
 
