@@ -38,7 +38,7 @@ def font_face(family, file, weight):
     opts = subset.Options()
     opts.flavor = "woff2"
     sub = subset.Subsetter(opts)
-    sub.populate(text=string.printable + "·")
+    sub.populate(text=string.printable + "·→−Δδ")
     sub.subset(font)
     buf = io.BytesIO()
     font.flavor = "woff2"
@@ -202,221 +202,205 @@ def hero():
 
 
 # ---------------------------------------------------------------- posters
+# One image per tool: logo, tagline, paper, link and an evidence strip on the left,
+# the tool's Anatomy machine (machines/how-<slug>.svg) on the right, on one field.
 
-POSTER_W, POSTER_H = 1280, 460
-PX, PY, PW, PH = 640, 40, 600, 380  # the right-hand panel
+POSTER_W, POSTER_H = 1280, 640
+SX, SY, SW, SH = 56, 392, 528, 212  # the evidence strip under the link
+MX, MY, MW, MH = 600, 16, 664, 608  # the machine
 
 
-def poster(p, visual, css=""):
+def machine(slug):
+    """The machine SVG without its own card, nested on the right; returns (svg, field colour, label)."""
+    s = (HERE / "machines" / f"how-{slug}.svg").read_text()
+    root = re.search(r"<svg\b[^>]*>", s).group(0)
+    w, h = map(float, re.search(r'viewBox="0 0 ([\d.]+) ([\d.]+)"', root).group(1, 2))
+    label = re.search(r'aria-label="([^"]*)"', root)
+    field = re.findall(r"--anatomy-card:\s*(#[0-9a-fA-F]{6})", s)[-1]
+    inner = s[s.index(root) + len(root):s.rindex("</svg>")]
+    # The first rect is the machine's own card; the poster field replaces it.
+    inner = re.sub(r'<rect\b[^>]*class="[a-z]+-(?:card|frame)"[^>]*/>', "", inner, count=1)
+    k = min(MW / w, MH / h)
+    x, y = MX + (MW - w * k) / 2, MY + (MH - h * k) / 2
+    nested = (f'<svg x="{x:.1f}" y="{y:.1f}" width="{w * k:.1f}" height="{h * k:.1f}" viewBox="0 0 {w:g} {h:g}" '
+              f'overflow="visible"><g class="iso-svg iso" data-theme="light">{inner}</g></svg>')
+    return nested, field, (label.group(1) if label else "")
+
+
+def poster(p, strip):
     c = p["c"]
-    lines = "".join(f'<tspan x="64" dy="{0 if i == 0 else 42}">{esc(l)}</tspan>' for i, l in enumerate(p["lines"]))
-    ref = text(64, 372, esc(p["ref"]), 19, c["dim"]) if p.get("ref") else ""
-    body = f"""<defs><clipPath id="r"><rect width="{POSTER_W}" height="{POSTER_H}" rx="20"/></clipPath></defs>
-<g clip-path="url(#r)">
-<rect width="{POSTER_W}" height="{POSTER_H}" fill="{c['field']}"/>
-{logo(p['logo'], 64, 56, 470, p.get('logo_h', 104), p.get('multiply', False))}
-<text x="64" y="238" font-family="{SANS}" font-size="34" fill="{c['ink']}" letter-spacing="-0.5">{lines}</text>
+    mach, field, label = machine(p["slug"])
+    lines = "".join(f'<tspan x="{SX}" dy="{0 if i == 0 else 38}">{esc(l)}</tspan>' for i, l in enumerate(p["lines"]))
+    ref = text(SX, 318, esc(p["ref"]), 18, c["dim"]) if p.get("ref") else ""
+    body = f"""<defs><clipPath id="pp-r"><rect width="{POSTER_W}" height="{POSTER_H}" rx="20"/></clipPath></defs>
+<g clip-path="url(#pp-r)">
+<rect width="{POSTER_W}" height="{POSTER_H}" fill="{field}"/>
+{logo(p['logo'], SX, 44, 440, p.get('logo_h', 84), p.get('multiply', False))}
+<text x="{SX}" y="196" font-family="{SANS}" font-size="30" fill="{c['ink']}" letter-spacing="-0.4">{lines}</text>
 {ref}
-{text(64, 410, esc(p['domain']), 20, c['accent'], MONO, 500)}
-{arrow_ne(64 + len(p['domain']) * 12 + 14, 395, c['accent'])}
-{visual}
+{text(SX, 354, esc(p['domain']), 19, c['accent'], MONO, 500)}
+{arrow_ne(SX + len(p['domain']) * 11.4 + 12, 340, c['accent'], 13)}
+{strip}
+{mach}
 </g>"""
-    return svg(POSTER_W, POSTER_H, body, css, p["name"] + ": " + " ".join(p["lines"]))
+    return svg(POSTER_W, POSTER_H, body, "", p["name"] + ": " + " ".join(p["lines"]) + " " + label)
 
 
-def v_coconut(c):
+def tile(x, y, w, h, fill):
+    return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="12" fill="{fill}"/>'
+
+
+def s_coconut(c):
     picks = [("quercetin", "O=c1c(O)c(-c2ccc(O)c(O)c2)oc2cc(O)cc(O)c12"),
              ("nicotine", "CN1CCC[C@H]1c1cccnc1"),
              ("menthol", "CC(C)[C@@H]1CC[C@@H](C)C[C@H]1O"),
-             ("resveratrol", "Oc1ccc(/C=C/c2cc(O)cc(O)c2)cc1"),
-             ("vanillin", "COc1cc(C=O)ccc1O"),
              ("salicin", "OC[C@H]1O[C@@H](Oc2ccccc2CO)[C@H](O)[C@@H](O)[C@@H]1O")]
-    out, cw, ch = [], 200, 180
+    out, cw = [], SW / 4
     for i, (name, smi) in enumerate(picks):
-        x, y = PX + (i % 3) * cw, PY + 10 + (i // 3) * ch
-        out.append(f'<rect x="{x + 6}" y="{y}" width="{cw - 12}" height="{ch - 14}" rx="12" fill="{c["tile"]}"/>')
-        out.append(place(x + 10, y + 4, mol(smi, cw - 20, 132, c["ink"], c["n"], c["o"], bond=20, lw=1.7, font=0.5)))
-        out.append(text(x + cw / 2, y + 150, name, 14, c["dim"], MONO, 500, "middle"))
+        x = SX + i * cw
+        out.append(tile(x + 4, SY, cw - 8, SH, c["tile"]))
+        out.append(place(round(x + 8, 1), SY + 8, mol(smi, int(cw - 16), 160, c["ink"], c["n"], c["o"], bond=15, lw=1.5, font=0.45)))
+        out.append(text(round(x + cw / 2, 1), SY + SH - 18, name, 14, c["dim"], MONO, 500, "middle"))
     return "".join(out)
 
 
-def v_decimer(c):
-    smi = "COc1cc(CNC(=O)CCCC/C=C/C(C)C)ccc1O"
-    canon = Chem.MolToSmiles(Chem.MolFromSmiles(smi))
-    px, py, pw, ph = PX + 150, PY + 18, 300, 220
-    page = mol(smi, pw - 20, ph - 20, "#3b3833", "#3b3833", "#3b3833", bond=20, lw=1.8, font=0.55)
-    sw = len(canon) * 12.6
-    css = (f".scan{{animation:scan 3.6s cubic-bezier(.45,0,.55,1) infinite alternate}}"
-           f"@keyframes scan{{from{{transform:translateY(0)}}to{{transform:translateY({ph - 6}px)}}}}"
-           )
-    body = f"""<filter id="soft"><feGaussianBlur stdDeviation="0.55"/></filter>
-<g transform="rotate(-3 {px + pw / 2} {py + ph / 2})">
-<rect x="{px}" y="{py}" width="{pw}" height="{ph}" rx="4" fill="#efe6d2"/>
-<g filter="url(#soft)">{place(px + 10, py + 10, page)}</g>
-<g class="scan"><rect x="{px - 8}" y="{py + 2}" width="{pw + 16}" height="3" fill="{c['accent']}"/>
-<rect x="{px}" y="{py - 26}" width="{pw}" height="28" fill="{c['accent']}" opacity=".14"/></g>
-</g>
-{arrow(PX + 300, PY + 256, PX + 300, PY + 290, c['accent'], 2.4)}
-{text(round(PX + 300 - sw / 2, 1), PY + 334, esc(canon), 21, c['ink'], MONO, 500)}
-{text(PX + 300, PY + 370, "SMILES", 13, c['dim'], MONO, 500, "middle", ' letter-spacing="2"')}"""
-    return body, css
-
-
-def v_chemaudit(c):
-    salt = "CC(=O)Oc1ccccc1C(=O)[O-].[Na+]"
-    parent = "CC(=O)Oc1ccccc1C(=O)O"
-    rows = ["validated", "standardized", "quality scored"]
-    out = [place(PX, PY + 10, mol(salt, 270, 200, c["ink"], c["n"], c["o"], bond=27, lw=2.2, font=0.6)),
-           arrow(PX + 280, PY + 110, PX + 330, PY + 110, c["accent"], 2.4),
-           place(PX + 340, PY + 10, mol(parent, 250, 200, c["ink"], c["n"], c["o"], bond=27, lw=2.2, font=0.6))]
-    for i, r in enumerate(rows):
-        y = PY + 268 + i * 38
-        out.append(check(PX + 40, y, c["accent"]))
-        out.append(text(PX + 78, y + 18, r, 22, c["ink"]))
-    out.append(text(PX + 135, PY + 230, "salt form in", 14, c["dim"], MONO, 500, "middle"))
-    out.append(text(PX + 465, PY + 230, "parent out", 14, c["dim"], MONO, 500, "middle"))
+def step_tiles(c, steps):
+    out, cw = [], SW / len(steps)
+    for i, (head, l1, l2) in enumerate(steps):
+        x = SX + i * cw
+        out.append(tile(round(x + 4, 1), SY, round(cw - 8, 1), SH, c["tile"]))
+        out.append(text(round(x + 22, 1), SY + 56, str(i + 1), 40, c["accent"], SANS, 800))
+        out.append(text(round(x + 22, 1), SY + 104, esc(head), 21, c["ink"], SANS, 800, extra=' letter-spacing="-0.3"'))
+        out.append(text(round(x + 22, 1), SY + 140, esc(l1), 15, c["dim"]))
+        out.append(text(round(x + 22, 1), SY + 162, esc(l2), 15, c["dim"]))
     return "".join(out)
 
 
-def v_cms(c):
-    # Response values from GET api.naturalproducts.net/latest/chem/descriptors (caffeine, rdkit).
-    k, v, d = c["accent"], c["ink"], c["dim"]
+def s_decimer(c):
+    return step_tiles(c, [("Segment", "finds each structure", "drawn on the page"),
+                          ("Classify", "flags crops that are", "chemical structures"),
+                          ("Recognise", "the Image Transformer", "writes the SMILES")])
+
+
+def s_chemaudit(c):
+    # Score rule from ValidationEngine._calculate_score; bands from the ChemAudit frontend.
+    x0, x1, by = SX + 24, SX + SW - 24, SY + 132
+    sx = lambda v: x0 + (x1 - x0) * v / 100
+    out = [tile(SX, SY, SW, SH, c["tile"]),
+           text(SX + 24, SY + 40, "score = 100 − 50·critical − 20·error − 5·warning", 16, c["ink"], MONO, 500),
+           text(SX + 24, SY + 70, "27 checks per structure", 15, c["dim"])]
+    for a, b, col in ((0, 50, "#d63a2f"), (50, 80, "#e0a020"), (80, 100, "#2e9e6b")):
+        out.append(f'<rect x="{sx(a):.1f}" y="{by}" width="{sx(b) - sx(a) - 2:.1f}" height="14" rx="3" fill="{col}"/>')
+    for t in (0, 50, 80, 100):
+        out.append(text(round(sx(t), 1), by + 38, str(t), 13, c["dim"], MONO, 500, "middle"))
+    for v, name, dy in ((85, "salt 85", 20), (100, "parent 100", 40)):
+        out.append(f'<path d="M{sx(v):.1f} {by - 4}l-6 -10h12z" fill="{c["ink"]}"/>')
+        out.append(f'<line x1="{sx(v):.1f}" y1="{by - 14}" x2="{sx(v):.1f}" y2="{by - dy + 4}" stroke="{c["ink"]}" stroke-width="1"/>')
+        out.append(text(round(sx(v) - 6, 1), by - dy, name, 13, c["ink"], MONO, 500, "end"))
+    return "".join(out)
+
+
+def s_cms(c):
+    # Live response from GET api.naturalproducts.net/latest/chem/descriptors (caffeine, rdkit).
+    k, v, d = "#f5c99b", "#f4ead8", "#a9b4c8"
     lines = [
-        [("GET ", d), ("/latest/chem/descriptors", v)],
-        [("    ?smiles=", d), ("CN1C=NC2=C1C(=O)N(C(=O)N2C)C", k)],
-        [("    &toolkit=", d), ("rdkit", k)],
-        [],
-        [("{", d)],
-        [('  "molecular_weight"', k), (": ", d), ("194.19", v), (",", d)],
+        [("GET ", d), ("/latest/chem/descriptors", v), ("?toolkit=", d), ("rdkit", k)],
+        [("    &smiles=", d), ("CN1C=NC2=C1C(=O)N(C(=O)N2C)C", k)],
+        [('{ "molecular_weight"', k), (": ", d), ("194.19", v), (",", d)],
         [('  "alogp"', k), (": ", d), ("-1.03", v), (",", d)],
         [('  "topological_polar_surface_area"', k), (": ", d), ("61.82", v), (",", d)],
-        [('  "qed_drug_likeliness"', k), (": ", d), ("0.54", v), (",", d)],
-        [("  ...", d)],
-        [("}", d)],
+        [('  "qed_drug_likeliness"', k), (": ", d), ("0.54", v), (", ... }", d)],
     ]
-    out = [f'<rect x="{PX}" y="{PY}" width="{PW - 20}" height="{PH}" rx="14" fill="{c["tile"]}"/>',
-           text(PX + 28, PY + 40, "api.naturalproducts.net", 15, d, MONO, 500)]
+    out = [tile(SX, SY, SW, SH, "#16294d")]
     for i, parts in enumerate(lines):
         spans = "".join(f'<tspan fill="{col}">{esc(t)}</tspan>' for t, col in parts)
-        out.append(f'<text x="{PX + 28}" y="{PY + 88 + i * 27}" font-family="{MONO}" font-weight="500" '
-                   f'font-size="17" xml:space="preserve">{spans}</text>')
+        out.append(f'<text x="{SX + 22}" y="{SY + 40 + i * 30 + (12 if i > 1 else 0)}" font-family="{MONO}" '
+                   f'font-weight="500" font-size="14.5" xml:space="preserve">{spans}</text>')
     return "".join(out)
 
 
-def v_mortar(c):
-    whole = "O=C(/C=C/C=C/c1ccc2c(c1)OCO2)N1CCCCC1"
-    m = Chem.MolFromSmiles(whole)
-    # Cut every bond between a ring atom and a chain atom: ring systems fall away from the linker.
-    cuts = [b.GetIdx() for b in m.GetBonds()
-            if not b.IsInRing() and (b.GetBeginAtom().IsInRing() != b.GetEndAtom().IsInRing())]
-    frags = Chem.GetMolFrags(Chem.FragmentOnBonds(m, cuts), asMols=True)
-    out = [place(PX + 20, PY - 10, mol(whole, 560, 170, c["ink"], c["n"], c["o"], bond=22, lw=2, font=0.6)),
-           f'<line x1="{PX + 30}" y1="{PY + 178}" x2="{PX + 570}" y2="{PY + 178}" stroke="{c["accent"]}" '
-           f'stroke-width="2" stroke-dasharray="2 8" stroke-linecap="round"/>']
-    widths = [200, 190, 170]
-    x = PX
-    for f, w in zip(frags, widths):
-        smi = Chem.MolToSmiles(f)
-        out.append(f'<rect x="{x + 6}" y="{PY + 200}" width="{w - 12}" height="170" rx="12" fill="{c["tile"]}"/>')
-        out.append(place(x + 10, PY + 210, mol(smi, w - 20, 150, c["ink"], c["n"], c["o"], bond=19, lw=1.8, font=0.55, attach=True)))
-        x += w
+def s_mortar(c):
+    # Algorithms and their default outputs, from MORTAR's *Fragmenter.java defaults.
+    algos = [("Ertl", "algorithm", "functional groups", "and alkanes", "#d9534f"),
+             ("Sugar", "Removal Utility", "aglycone", "and sugars", "#2e9e6b"),
+             ("Scaffold", "Generator", "scaffolds", "", "#3e63dd"),
+             ("MolWURCS", "", "sugar", "fragments", "#9b59b6")]
+    out, cw = [], SW / 4
+    for i, (a, b, o1, o2, col) in enumerate(algos):
+        x = round(SX + i * cw + 4, 1)
+        out.append(tile(x, SY, round(cw - 8, 1), SH, c["tile"]))
+        out.append(f'<rect x="{x}" y="{SY}" width="{cw - 8:.1f}" height="10" rx="5" fill="{col}"/>')
+        out.append(text(x + 14, SY + 50, esc(a), 17, c["ink"], SANS, 800, extra=' letter-spacing="-0.3"'))
+        out.append(text(x + 14, SY + 74, esc(b), 15, c["ink"]))
+        out.append(text(x + 14, SY + 146, esc(o1), 13, c["dim"]))
+        out.append(text(x + 14, SY + 166, esc(o2), 13, c["dim"]))
+        out.append(text(x + 14, SY + 120, "returns", 13, col, MONO, 500))
     return "".join(out)
 
 
-def v_orthonym(c):
+def s_orthonym(c):
     smi = "COc1cc(C=O)ccc1O"
-    out = [place(PX, PY + 40, mol(smi, 250, 250, c["ink"], c["n"], c["o"], bond=34, lw=2.6, font=0.7)),
-           text(PX + 262, PY + 150, "4-hydroxy-3-", 31, c["ink"], SANS, 800, extra=' letter-spacing="-0.8"'),
-           text(PX + 262, PY + 190, "methoxybenzaldehyde", 31, c["ink"], SANS, 800, extra=' letter-spacing="-0.8"')]
-    # The round trip: structure to name, and OPSIN reading the name back.
-    out.append(f'<path d="M{PX + 150} {PY + 34}C{PX + 230} {PY - 6} {PX + 330} {PY + 10} {PX + 380} {PY + 100}" '
-               f'fill="none" stroke="{c["accent"]}" stroke-width="2"/>')
-    out.append(arrow(PX + 372, PY + 86, PX + 381, PY + 102, c["accent"], 2))
-    out.append(text(PX + 290, PY + 24, "Orthonym", 15, c["accent"], MONO, 500))
-    out.append(f'<path d="M{PX + 420} {PY + 222}C{PX + 400} {PY + 330} {PX + 260} {PY + 350} {PX + 150} {PY + 300}" '
-               f'fill="none" stroke="{c["dim"]}" stroke-width="2" stroke-dasharray="1 7" stroke-linecap="round"/>')
-    out.append(arrow(PX + 166, PY + 306, PX + 150, PY + 300, c["dim"], 2))
-    out.append(text(PX + 330, PY + 352, "OPSIN reads it back", 15, c["dim"], MONO, 500))
-    out.append(check(PX + 516, PY + 334, c["accent"]))
-    return "".join(out)
+    return "".join([tile(SX, SY, SW, SH, c["tile"]),
+                    place(SX + 8, SY + 6, mol(smi, 200, 200, c["ink"], c["n"], c["o"], bond=26, lw=2.2, font=0.6)),
+                    text(SX + 220, SY + 84, "4-hydroxy-3-", 26, c["ink"], SANS, 800, extra=' letter-spacing="-0.5"'),
+                    text(SX + 220, SY + 118, "methoxybenzaldehyde", 26, c["ink"], SANS, 800, extra=' letter-spacing="-0.5"'),
+                    text(SX + 220, SY + 154, "vanillin: structure in, name out", 15, c["dim"])])
 
 
-def v_surge(c):
-    isomers = ["CCCCO", "CCC(C)O", "CC(C)CO", "CC(C)(C)O", "CCOCC", "CCCOC", "CC(C)OC"]
-    out = [f'<rect x="{PX}" y="{PY}" width="{PW - 20}" height="56" rx="12" fill="{c["tile"]}"/>',
-           f'<text x="{PX + 24}" y="{PY + 36}" font-family="{MONO}" font-weight="500" font-size="21" xml:space="preserve">'
-           f'<tspan fill="{c["dim"]}">$ </tspan><tspan fill="{c["ink"]}">surge -S C4H10O</tspan></text>',
-           text(PX + PW - 44, PY + 36, "7 isomers", 17, c["accent"], MONO, 500, "end")]
-    cw, ch = 145, 150
-    for i, smi in enumerate(isomers):
-        col, rw = (i, 0) if i < 4 else (i - 4 + 0.5, 1)
-        x, y = PX + col * cw, PY + 76 + rw * (ch + 4)
-        out.append(place(x, y, mol(smi, cw - 10, ch, c["ink"], c["n"], c["o"], bond=31, lw=2.4, font=0.65)))
-    return "".join(out)
+def s_surge(c):
+    # From the Surge README: `surge -u C10H16O` makes the 452458 isomers of C10H16O in 0.1 s (2021 PC).
+    return "".join([tile(SX, SY, SW, SH, c["tile"]),
+                    f'<text x="{SX + 24}" y="{SY + 42}" font-family="{MONO}" font-weight="500" font-size="18" xml:space="preserve">'
+                    f'<tspan fill="{c["dim"]}">$ </tspan><tspan fill="{c["ink"]}">surge -u C10H16O</tspan></text>',
+                    text(SX + 22, SY + 122, "452,458", 64, c["accent"], SANS, 800, extra=' letter-spacing="-2"'),
+                    text(SX + 300, SY + 100, "isomers in 0.1 s", 19, c["ink"]),
+                    text(SX + 300, SY + 124, "on a 2021 PC", 15, c["dim"]),
+                    text(SX + 24, SY + 178, "nauty · canonical augmentation · no duplicates", 15, c["dim"])])
 
 
-def v_sherlock(c):
-    # 13C NMR of caffeine (CDCl3), ppm; Sherlock works from spectra like this to candidate structures.
-    peaks = [(155.4, .78), (151.7, .7), (148.7, .74), (141.4, .9), (107.6, .62), (33.6, 1), (29.7, .95), (27.9, .92)]
-    ax0, ax1, base, top = PX + 10, PX + 400, PY + 300, PY + 60
-    sx = lambda ppm: ax1 - (ppm / 180) * (ax1 - ax0)
-    out = [f'<line x1="{ax0}" y1="{base}" x2="{ax1}" y2="{base}" stroke="{c["dim"]}" stroke-width="1.5"/>']
-    for t in (0, 50, 100, 150):
-        out.append(f'<line x1="{sx(t):.1f}" y1="{base}" x2="{sx(t):.1f}" y2="{base + 8}" stroke="{c["dim"]}" stroke-width="1.5"/>')
-        out.append(text(round(sx(t), 1), base + 30, str(t), 14, c["dim"], MONO, 500, "middle"))
-    out.append(text(ax1, base + 56, "13C  ppm", 14, c["dim"], MONO, 500, "end"))
-    for i, (ppm, hgt) in enumerate(peaks):
-        x = sx(ppm)
-        y = base - hgt * (base - top)
-        out.append(f'<line x1="{x:.1f}" y1="{base}" x2="{x:.1f}" '
-                   f'y2="{y:.1f}" stroke="{c["accent"]}" stroke-width="2.6" stroke-linecap="round"/>')
-    out.append(arrow(PX + 418, PY + 190, PX + 450, PY + 190, c["accent"], 2.4))
-    out.append(place(PX + 450, PY + 90, mol("Cn1cnc2c1c(=O)n(C)c(=O)n2C", 150, 200, c["ink"], c["n"], c["o"],
-                                            bond=20, lw=2, font=0.55)))
-    return "".join(out)
+def s_sherlock(c):
+    # Ranking rule from casekit FilterAndRank.rank, which Sherlock calls; PyLSD from the README.
+    return "".join([tile(SX, SY, SW, SH, c["tile"]),
+                    place(SX + 10, SY + 6, mol("Cn1cnc2c1c(=O)n(C)c(=O)n2C", 190, 200, c["ink"], c["n"], c["o"], bond=22, lw=2, font=0.55)),
+                    text(SX + 214, SY + 62, "PyLSD builds candidates,", 19, c["ink"]),
+                    text(SX + 214, SY + 92, "ranked by matched signals,", 19, c["ink"]),
+                    text(SX + 214, SY + 122, "then by mean |Δδ|", 19, c["ink"]),
+                    text(SX + 214, SY + 162, "caffeine, 8 carbon peaks", 15, c["dim"])])
 
 
 POSTERS = [
-    dict(slug="coconut", name="COCONUT", logo="coconut.png", logo_h=96,
-         lines=["The COlleCtion of Open", "Natural prodUcTs: deposit,", "curate and reuse NP data."],
+    dict(slug="coconut", name="COCONUT", logo="coconut.png", logo_h=80,
+         lines=["The COlleCtion of Open Natural", "prodUcTs: deposit, curate", "and reuse natural product data."],
          ref="Nucleic Acids Research, 2025", domain="coconut.naturalproducts.net",
-         c=dict(field="#f1e8da", tile="#e9dccb", ink="#2e2118", dim="#6b5848", accent="#8a4f26", n="#2f55b5", o="#b4432f"),
-         v=v_coconut),
-    dict(slug="decimer", name="DECIMER.ai", logo="decimer_w.png", logo_h=96,
+         c=dict(tile="#ece0cf", ink="#2e2118", dim="#6b5848", accent="#8a4f26", n="#2f55b5", o="#b4432f"), s=s_coconut),
+    dict(slug="decimer", name="DECIMER.ai", logo="decimer.png", logo_h=80,
          lines=["Extract chemical structures", "from PDFs and images, and", "turn them into SMILES."],
          ref="Nature Communications, 2023", domain="decimer.ai",
-         c=dict(field="#0f1d17", tile="#16281f", ink="#f1ece2", dim="#a7b0a5", accent="#f2d27a", n="#8fb0ff", o="#ff8a73"),
-         v=v_decimer),
-    dict(slug="chemaudit", name="ChemAudit", logo="chemaudit.png", logo_h=104,
-         lines=["Validate, standardize and", "score structures before they", "feed a model or a database."],
+         c=dict(tile="#dde9e0", ink="#17302a", dim="#4d6358", accent="#2f5d4a", n="#2f55b5", o="#b4432f"), s=s_decimer),
+    dict(slug="chemaudit", name="ChemAudit", logo="chemaudit.png", logo_h=88,
+         lines=["Validate, standardize and score", "structures before they feed", "a model or a database."],
          ref="Software on Zenodo", domain="chemaudit.naturalproducts.net",
-         c=dict(field="#fbf2ec", tile="#f3e3d8", ink="#26140f", dim="#6d5850", accent="#c8411b", n="#2f55b5", o="#c8411b"),
-         v=v_chemaudit),
-    dict(slug="cms", name="Cheminformatics Microservice", logo="cms_w.png", logo_h=120,
+         c=dict(tile="#f3e3d8", ink="#26140f", dim="#6d5850", accent="#c8411b", n="#2f55b5", o="#c8411b"), s=s_chemaudit),
+    dict(slug="cms", name="Cheminformatics Microservice", logo="cms.png", logo_h=100,
          lines=["CDK, RDKit and Open Babel,", "unified behind one REST API", "and web app."],
          ref="Journal of Cheminformatics, 2023", domain="app.naturalproducts.net",
-         c=dict(field="#0b1d3a", tile="#07152c", ink="#f4ead8", dim="#a9b4c8", accent="#f5c99b", n="#8fb0ff", o="#ff8a73"),
-         v=v_cms),
-    dict(slug="mortar", name="MORTAR", logo="mortar.png", logo_h=96, multiply=True,
-         lines=["The MOlecule fRagmenTAtion", "fRamework: in silico", "fragmentation on the desktop."],
+         c=dict(tile="#dde5f3", ink="#0f1e3a", dim="#4a5a78", accent="#b6531a", n="#2f55b5", o="#b4432f"), s=s_cms),
+    dict(slug="mortar", name="MORTAR", logo="mortar.png", logo_h=80, multiply=True,
+         lines=["The MOlecule fRagmenTAtion", "fRamework: in silico fragmentation", "of whole compound sets."],
          ref="Journal of Cheminformatics, 2022", domain="felixbaensch.github.io/MORTAR",
-         c=dict(field="#f5eedf", tile="#ece1c9", ink="#2f2618", dim="#6e604a", accent="#a86c0c", n="#2f55b5", o="#b4432f"),
-         v=v_mortar),
-    dict(slug="orthonym", name="Orthonym", logo="orthonym_w.png", logo_h=88,
-         lines=["Deterministic structure-to-", "IUPAC names, each checked", "by an OPSIN round trip."],
+         c=dict(tile="#ece1c9", ink="#2f2618", dim="#6e604a", accent="#8f5c0a", n="#2f55b5", o="#b4432f"), s=s_mortar),
+    dict(slug="orthonym", name="Orthonym", logo="orthonym.png", logo_h=70,
+         lines=["Deterministic structure-to-IUPAC", "names, each checked by an", "OPSIN round trip."],
          domain="orthonym.decimer.ai",
-         c=dict(field="#0c0c0d", tile="#18181a", ink="#f2f2f0", dim="#a3a3a3", accent="#d8cfbd", n="#8fb0ff", o="#ff8a73"),
-         v=v_orthonym),
-    dict(slug="surge", name="SURGE", logo="surge.png", logo_h=96,
+         c=dict(tile="#e4e4ea", ink="#18181b", dim="#55565e", accent="#5a3ddb", n="#2f55b5", o="#b4432f"), s=s_orthonym),
+    dict(slug="surge", name="SURGE", logo="surge.png", logo_h=80,
          lines=["A fast open-source chemical", "graph generator: every", "isomer of a formula."],
          ref="Journal of Cheminformatics, 2022", domain="github.com/StructureGenerator/surge",
-         c=dict(field="#edf1fb", tile="#dfe6f8", ink="#14166b", dim="#4d5378", accent="#2a63c9", n="#2a63c9", o="#c23b2e"),
-         v=v_surge),
-    dict(slug="sherlock", name="Sherlock", logo="sherlock.png", logo_h=150,
+         c=dict(tile="#dfe6f8", ink="#14166b", dim="#4d5378", accent="#2a63c9", n="#2a63c9", o="#c23b2e"), s=s_surge),
+    dict(slug="sherlock", name="Sherlock", logo="sherlock.png", logo_h=120,
          lines=["Computer-assisted structure", "elucidation: from NMR", "spectra to structures."],
          ref="Molecules, 2023", domain="github.com/Steinbeck-Lab/sherlock",
-         c=dict(field="#14161c", tile="#1c1f27", ink="#ece8e0", dim="#a4a9b5", accent="#e6b65c", n="#8fb0ff", o="#ff8a73"),
-         v=v_sherlock),
+         c=dict(tile="#efe4cf", ink="#1b2830", dim="#4c5a64", accent="#94600f", n="#2f55b5", o="#b4432f"), s=s_sherlock),
 ]
 
 
@@ -433,13 +417,9 @@ def footer():
 
 
 if __name__ == "__main__":
-    for old in HERE.glob("*.svg"):
-        old.unlink()
     out = {"hero.svg": hero(), "footer.svg": footer()}
     for p in POSTERS:
-        v = p["v"](p["c"])
-        visual, css = v if isinstance(v, tuple) else (v, "")
-        out[f"poster-{p['slug']}.svg"] = poster(p, visual, css)
+        out[f"poster-{p['slug']}.svg"] = poster(p, p["s"](p["c"]))
     for name, data in out.items():
         (HERE / name).write_text(data)
         print(f"{name:26} {len(data) // 1024:4} KB")
